@@ -56,7 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             }else{
                 String genToken = UUID.randomUUID().toString().replace("-","");
                 redisTemplate.opsForValue().set("user:token:"+username,genToken,1,TimeUnit.DAYS);
-                redisTemplate.opsForValue().set("token:user:"+genToken,username,1,TimeUnit.DAYS);
+                redisTemplate.opsForValue().set("token:user:"+genToken,user,1,TimeUnit.DAYS);
                 log.info("生成token:"+genToken);
                 return genToken;
             }

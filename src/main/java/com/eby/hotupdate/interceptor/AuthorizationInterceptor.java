@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class AuthorizationInterceptor implements HandlerInterceptor {
@@ -35,7 +36,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         Method method = handlerMethod.getMethod();
         // 如果打上了AuthToken注解则需要验证token
         if (method.getAnnotation(AuthToken.class) != null || handlerMethod.getBeanType().getAnnotation(AuthToken.class) != null) {
-            String token = request.getParameter(tokenName);//获取到token
+            String token = request.getHeader(tokenName);//获取到token
             //PrintWriter writer = response.getWriter();
             if(token!=null&&token.length()!=0){
                 Boolean hasToken = redisTemplate.hasKey("token:user:"+token);
@@ -54,13 +55,13 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    public void returnErrorResponse(HttpServletResponse response, ResCommonBean result) throws IOException, UnsupportedEncodingException {
+    public void returnErrorResponse(HttpServletResponse response, ResCommonBean result) throws IOException {
         OutputStream out = null;
         try {
             response.setCharacterEncoding("utf-8");
             response.setContentType("text/json");
             out = response.getOutputStream();
-            out.write(JSON.toJSONString(result).getBytes("utf-8"));
+            out.write(JSON.toJSONString(result).getBytes(StandardCharsets.UTF_8));
             out.flush();
         } finally {
             if (out != null) {

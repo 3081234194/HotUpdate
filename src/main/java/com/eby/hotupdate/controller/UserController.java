@@ -30,9 +30,8 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
-
     @AuthToken
-    @GetMapping("/all")
+    @PostMapping("/all")
     public ResCommonBean getAllUser(){
         return ResCommonBean.successData(userService.getAllUser());
     }

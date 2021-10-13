@@ -31,7 +31,7 @@ public class ProjectsServiceImpl extends ServiceImpl<ProjectsMapper, Projects> i
     @Autowired
     private RedisUtils redisUtils;
     @Override
-    public String insert(String token, String name, String description) {
+    public Projects insert(String token, String name, String description) {
         User user = (User) redisUtils.get("token:user:"+token);//获取user对象
         String url = UUID.randomUUID().toString().replace("-","");
 
@@ -44,7 +44,7 @@ public class ProjectsServiceImpl extends ServiceImpl<ProjectsMapper, Projects> i
         projects.setUpdateTime(new Date());
 //        projects.set
 
-        if(projectsMapper.insert(projects)==1)return url;
+        if(projectsMapper.insert(projects)==1) return projects;
         return null;
     }
 }

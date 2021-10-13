@@ -1,13 +1,20 @@
 package com.eby.hotupdate.pojo;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
+@ApiModel
 public class ResCommonBean {
+    @ApiModelProperty(value = "状态码")
     private Integer code;
+    @ApiModelProperty(value = "处理消息")
     private String msg;
+    @ApiModelProperty(value = "返回数据")
     private Object data;
 
     /*

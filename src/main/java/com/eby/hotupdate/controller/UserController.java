@@ -6,6 +6,8 @@ import com.eby.hotupdate.mapper.UserMapper;
 import com.eby.hotupdate.pojo.ResCommonBean;
 import com.eby.hotupdate.pojo.User;
 import com.eby.hotupdate.service.impl.UserServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -24,6 +26,7 @@ import java.util.UUID;
  * @since 2021-09-28
  */
 @RestController
+@Api(tags = "用户管理相关接口")
 @RequestMapping("/api/user")
 @Slf4j
 public class UserController {
@@ -32,6 +35,7 @@ public class UserController {
     private UserServiceImpl userService;
     @AuthToken
     @PostMapping("/all")
+    @ApiOperation("获取所有用户（所有信息包含密码）接口---目前仅测试开放")
     public ResCommonBean getAllUser(){
         return ResCommonBean.successData(userService.getAllUser());
     }

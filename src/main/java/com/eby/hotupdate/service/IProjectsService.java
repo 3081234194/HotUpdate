@@ -14,5 +14,5 @@ import com.eby.hotupdate.pojo.Projects;
 public interface IProjectsService extends IService<Projects> {
 
     //插入，返回链接
-    String insert(String token, String name, String description);
+    Projects insert(String token, String name, String description);
 }

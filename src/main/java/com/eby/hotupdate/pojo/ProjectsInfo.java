@@ -1,5 +1,6 @@
 package com.eby.hotupdate.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -47,6 +48,7 @@ public class ProjectsInfo implements Serializable {
     /**
      * 是否强制更新
      */
+    @TableField("forces")
     private Boolean force;
 
 

@@ -2,6 +2,7 @@ package com.eby.hotupdate.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eby.hotupdate.mapper.ProjectsInfoMapper;
+import com.eby.hotupdate.pojo.Projects;
 import com.eby.hotupdate.pojo.ProjectsInfo;
 import com.eby.hotupdate.reqdto.ProjectsInfoReq;
 import com.eby.hotupdate.service.IProjectsInfoService;
@@ -23,7 +24,7 @@ public class ProjectsInfoServiceImpl extends ServiceImpl<ProjectsInfoMapper, Pro
     private ProjectsInfoMapper projectsInfoMapper;
     //往数据库中插入新项目详情
     @Override
-    public Boolean insert(Long id,ProjectsInfoReq projectsInfoReq) {
+    public ProjectsInfo insert(Long id,ProjectsInfoReq projectsInfoReq) {
         ProjectsInfo projectsInfo = new ProjectsInfo();
         projectsInfo.setId(id);
         projectsInfo.setDialog(projectsInfoReq.getDialog());
@@ -33,12 +34,19 @@ public class ProjectsInfoServiceImpl extends ServiceImpl<ProjectsInfoMapper, Pro
         projectsInfo.setUpdateUrl(projectsInfoReq.getUpdate_url());
         System.out.println(projectsInfo);
         int res = projectsInfoMapper.insert(projectsInfo);
-        return res==1?true:false;//更改记录是否是一行,不是则插入失败
+        return res==1?projectsInfo:null;//更改记录是否是一行,不是则插入失败
     }
 
     @Override
     public void update(ProjectsInfo projectsInfo) {
         //todo:这里传入id就能修改，还需要判断一下是不是属于用户的项目--在这里判断还是在外面判断
         projectsInfoMapper.updateById(projectsInfo);
+    }
+
+    //通过id查询实体类
+    @Override
+    public ProjectsInfo queryTo(Long id) {
+        ProjectsInfo projectsInfo = projectsInfoMapper.selectById(id);
+        return projectsInfo!=null?projectsInfo:null;
     }
 }

@@ -1,5 +1,6 @@
 package com.eby.hotupdate;
 
+import com.eby.hotupdate.service.impl.ProjectsServiceImpl;
 import com.eby.hotupdate.utils.RedisUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,14 @@ import java.sql.SQLException;
 class HotupdateApplicationTests {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private ProjectsServiceImpl projectsService;
     @Autowired
     private RedisUtils redisUtils;
     @Test
     void contextLoads() throws SQLException {
-        System.out.println(redisUtils.hasKey("token:user:"+"fejfkef"));
+        System.out.println("-----");
+        System.out.println(projectsService.getAll());
+        System.out.println("-----");
     }
 
 }

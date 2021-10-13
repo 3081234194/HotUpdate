@@ -3,6 +3,8 @@ package com.eby.hotupdate.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.eby.hotupdate.pojo.Projects;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -15,4 +17,7 @@ public interface IProjectsService extends IService<Projects> {
 
     //插入，返回链接
     Projects insert(String token, String name, String description);
+    //返回所有项目
+    List<Projects> getAll();
+    Boolean updateTo();
 }

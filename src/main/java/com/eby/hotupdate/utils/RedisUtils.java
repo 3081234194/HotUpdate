@@ -25,6 +25,10 @@ public class RedisUtils {
         this.redisTemplate = redisTemplate;
     }
 
+    public RedisUtils() {
+
+    }
+
     /**
      * 指定缓存失效时间
      * @param key 键

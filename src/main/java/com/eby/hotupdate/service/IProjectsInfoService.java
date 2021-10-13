@@ -16,7 +16,8 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 public interface IProjectsInfoService extends IService<ProjectsInfo> {
 
     //往数据库中添加项目详情
-    Boolean insert(Long id, ProjectsInfoReq projectsInfoReq);
+    ProjectsInfo insert(Long id, ProjectsInfoReq projectsInfoReq);
     //更改项目详情
     void update(ProjectsInfo projectsInfo);
+    ProjectsInfo queryTo(Long id);
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -33,8 +34,8 @@ public class ProjectsServiceImpl extends ServiceImpl<ProjectsMapper, Projects> i
     @Override
     public Projects insert(String token, String name, String description) {
         User user = (User) redisUtils.get("token:user:"+token);//获取user对象
+        if(user==null) return null;
         String url = UUID.randomUUID().toString().replace("-","");
-
         Projects projects = new Projects();
         projects.setBelong(user.getId());//设置所属
         projects.setDescription(""+description);//设置描述
@@ -46,5 +47,16 @@ public class ProjectsServiceImpl extends ServiceImpl<ProjectsMapper, Projects> i
 
         if(projectsMapper.insert(projects)==1) return projects;
         return null;
+    }
+    @Override
+    public List<Projects> getAll(){
+        List<Projects> projectsList = projectsMapper.selectList(null);
+        if(!projectsList.isEmpty())return projectsList;
+        return null;
+    }
+
+    @Override
+    public Boolean updateTo() {
+        return false;
     }
 }

@@ -9,7 +9,9 @@ import com.eby.hotupdate.reqdto.ProjectsReq;
 import com.eby.hotupdate.service.impl.ProjectsInfoServiceImpl;
 import com.eby.hotupdate.service.impl.ProjectsServiceImpl;
 import com.eby.hotupdate.utils.RedisUtils;
+import com.eby.hotupdate.vo.ProjectsVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +40,7 @@ public class ProjectsController implements InitializingBean {
     private ProjectsInfoServiceImpl projectsInfoService;
     @Autowired
     private RedisUtils redisUtils;
+    @ApiOperation(value = "新建项目，包含项目详情")
     @PostMapping("/insert")
     public ResCommonBean insert(@RequestHeader("Token") String token, ProjectsReq projectsReq,ProjectsInfoReq projectsInfoReq){
         //这里获取到的projects已经由mb-p注入了id
@@ -51,6 +54,14 @@ public class ProjectsController implements InitializingBean {
         }
 
         return ResCommonBean.error();
+    }
+
+    @ApiOperation(value = "修改项目")
+    @PostMapping("/update")
+    public ResCommonBean update(@RequestHeader("Token") String token, ProjectsVo projectsVo){
+        Boolean res = projectsService.updateTo(token, projectsVo);
+        if(res)return  ResCommonBean.success();
+        return ResCommonBean.error("修改失败");
     }
     /**
      * 系统初始化，把所有的链接加入到redis缓存中

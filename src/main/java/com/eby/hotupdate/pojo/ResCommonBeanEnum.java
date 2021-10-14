@@ -7,7 +7,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ResCommonBeanEnum {
     success(200,"SUCCESS"),
-    error(500,"服务端故障");
+    error(500,"服务端故障"),
+    unauthorized(800,"为登录或未授权访问");
+
     private Integer code;
     private String msg;
 }

@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eby.hotupdate.mapper.ProjectsMapper;
 import com.eby.hotupdate.mapper.UserMapper;
 import com.eby.hotupdate.pojo.Projects;
+import com.eby.hotupdate.pojo.ProjectsInfo;
 import com.eby.hotupdate.pojo.User;
+import com.eby.hotupdate.reqdto.ProjectsReq;
 import com.eby.hotupdate.service.IProjectsService;
 import com.eby.hotupdate.utils.RedisUtils;
+import com.eby.hotupdate.vo.ProjectsVo;
 import org.springframework.beans.BeanInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +59,23 @@ public class ProjectsServiceImpl extends ServiceImpl<ProjectsMapper, Projects> i
     }
 
     @Override
-    public Boolean updateTo() {
+    public Boolean updateTo(String token, ProjectsVo projectsVo) {
+        User user = (User) redisUtils.get("token:user:"+token);//获取user对象
+        if(user==null) return false;//判断是否登录
+        else{
+            //判断项目所属人是否为本用户
+            Projects projects = projectsMapper.selectById(projectsVo.getId());
+            if(projects==null)return false;//如果查询为空则返回
+            else{
+                if(projects.getBelong().equals(user.getId())){//所属匹配则进行更改
+                    //能改的就这三项
+                    projects.setUpdateTime(new Date());
+                    projects.setName(projectsVo.getName());
+                    projects.setDescription(projectsVo.getDescription());
+                    return projectsMapper.updateById(projects)==1?true:false;
+                }
+            }
+        }
         return false;
     }
 }

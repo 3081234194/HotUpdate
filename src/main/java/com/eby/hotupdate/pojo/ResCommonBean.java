@@ -36,6 +36,10 @@ public class ResCommonBean {
     public static ResCommonBean success(String msg, Object obj){
         return new ResCommonBean(ResCommonBeanEnum.success.getCode(), msg, obj);
     }
+    //resultEnum
+    public static ResCommonBean send(ResCommonBeanEnum resCommonBeanEnum){
+        return new ResCommonBean(resCommonBeanEnum.getCode(), resCommonBeanEnum.getMsg(), null);
+    }
 
     /*
     * 错误信息返回

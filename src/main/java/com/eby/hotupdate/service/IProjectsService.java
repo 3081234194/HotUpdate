@@ -22,4 +22,5 @@ public interface IProjectsService extends IService<Projects> {
     //返回所有项目
     List<Projects> getAll();
     Boolean updateTo(String token, ProjectsVo projectsVo);
+    Boolean deleteTo(String token,ProjectsVo projectsVo);
 }

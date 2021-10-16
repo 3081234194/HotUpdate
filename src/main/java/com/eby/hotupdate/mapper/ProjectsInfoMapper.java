@@ -17,6 +17,7 @@ import java.io.Serializable;
  */
 public interface ProjectsInfoMapper extends BaseMapper<ProjectsInfo> {
 
+
     @Select("SELECT id,update_url,version,dialog,msg,forces AS `force` FROM projects_info WHERE id=#{id}")
     ProjectsInfo selectById(@Param("id") Serializable id);
 }

@@ -14,10 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -62,6 +59,25 @@ public class ProjectsController implements InitializingBean {
         Boolean res = projectsService.updateTo(token, projectsVo);
         if(res)return  ResCommonBean.success();
         return ResCommonBean.error("修改失败");
+    }
+
+
+    @ApiOperation(value = "返回用户的项目list--分页--swagger中返回的id不对")
+    @PostMapping("/queryProjects")
+    public ResCommonBean getProjectVoByUser(@RequestHeader("Token") String token,int pageIndex){
+        List<ProjectsVo> res= projectsService.getProjectsByUser(token,pageIndex);
+        if(res!=null) {
+            System.out.println(res.toArray()[0]);
+            return ResCommonBean.successData(res);
+        }
+        return ResCommonBean.error("未查询到结果");
+    }
+
+    @ApiOperation(value = "删除用户的项目")
+    @PostMapping(value = "/delete")
+    public ResCommonBean deleteProjectsById(@RequestHeader("Token") String token,Long id){
+        if(projectsService.deleteTo(token,id))return ResCommonBean.success("操作成功");
+        return ResCommonBean.error();
     }
     /**
      * 系统初始化，把所有的链接加入到redis缓存中

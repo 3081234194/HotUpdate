@@ -1,6 +1,8 @@
 package com.eby.hotupdate.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.eby.hotupdate.mapper.ProjectsInfoMapper;
 import com.eby.hotupdate.mapper.ProjectsMapper;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -64,13 +67,15 @@ public class ProjectsServiceImpl extends ServiceImpl<ProjectsMapper, Projects> i
         return null;
     }
     //分页查询用户所属的项目
-    public List<ProjectsVo> getProjectsByUser(String token){
+    @Override
+    public List<ProjectsVo> getProjectsByUser(String token,int pageIndex){
         User user = (User) redisUtils.get("token:user:"+token);//获取user对象
         if(user==null) return null;//判断是否登录
 
-        List<Projects> projectsList= projectsMapper.selectList(new QueryWrapper<Projects>().eq("belong",user.getId())) ;
+        List<Projects> projectsList = projectsMapper.selectPage(new Page<Projects>(pageIndex, 5),
+                new QueryWrapper<Projects>().eq("belong", user.getId())).getRecords();
         if(!projectsList.isEmpty()){
-            List<ProjectsVo> projectsVoList = null;
+            List<ProjectsVo> projectsVoList = new ArrayList<>();
             for (Projects projects : projectsList) {
                 ProjectsVo projectsVo = new ProjectsVo();
                 projectsVo.setId(projects.getId());
@@ -85,21 +90,29 @@ public class ProjectsServiceImpl extends ServiceImpl<ProjectsMapper, Projects> i
         }
         return null;
     }
-    @Transactional
-    public Boolean deleteTo(String token,ProjectsVo projectsVo){
+
+
+
+    //@Transactional
+    @Override
+    public Boolean deleteTo(String token,Long id){
         User user = (User) redisUtils.get("token:user:"+token);//获取user对象
         if(user==null) return false;//判断是否登录
         else{
             //判断项目所属人是否为本用户
-            Projects projects = projectsMapper.selectById(projectsVo.getId());
+            Projects projects = projectsMapper.selectOne(new QueryWrapper<Projects>().eq("id",id).eq("belong",user.getId()));
             if(projects==null)return false;//如果查询为空则返回
             else{
                     //项目和项目详情id是一样的
-                    int res1 = projectsMapper.deleteById(projectsVo.getId());
-                    int res2 = projectsInfoMapper.deleteById(projectsVo.getId());
-                    return res1==1&&res2==1?true:false;
+                    int res1 = projectsMapper.deleteById(id);
+                    //int res2 = projectsInfoMapper.deleteById(id);
+                    if(res1==1){
+                        redisUtils.del("url:projectInfo:"+projects.getUrl());
+                        return true;
+                    }
                 }
         }
+        return false;
     }
     @Override
     public Boolean updateTo(String token, ProjectsVo projectsVo) {

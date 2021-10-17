@@ -32,7 +32,6 @@ public class ProjectsInfoServiceImpl extends ServiceImpl<ProjectsInfoMapper, Pro
         projectsInfo.setMsg(projectsInfoReq.getMsg());
         projectsInfo.setVersion(projectsInfoReq.getVersion());
         projectsInfo.setUpdateUrl(projectsInfoReq.getUpdate_url());
-        System.out.println(projectsInfo);
         int res = projectsInfoMapper.insert(projectsInfo);
         return res==1?projectsInfo:null;//更改记录是否是一行,不是则插入失败
     }

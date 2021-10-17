@@ -1,7 +1,9 @@
 package com.eby.hotupdate.controller;
 
 
+import com.eby.hotupdate.exception.GlobalException;
 import com.eby.hotupdate.pojo.ProjectsInfo;
+import com.eby.hotupdate.pojo.ResCommonBeanEnum;
 import com.eby.hotupdate.utils.RedisUtils;
 import com.eby.hotupdate.vo.ProjectsInfoVo;
 import io.swagger.annotations.Api;
@@ -32,12 +34,13 @@ public class ProjectsInfoController {
         ProjectsInfo projectsInfo = (ProjectsInfo) redisUtils.get("url:projectInfo:"+url);
         if(projectsInfo!=null){
             ProjectsInfoVo projectsInfoVo = new ProjectsInfoVo();
+            projectsInfoVo.setId(projectsInfo.getId());
+            projectsInfoVo.setUpdate_url(projectsInfo.getUpdateUrl());
             projectsInfoVo.setDialog(projectsInfo.getDialog());
             projectsInfoVo.setForce(projectsInfo.getForce());
             projectsInfoVo.setMsg(projectsInfo.getMsg());
             projectsInfoVo.setVersion(projectsInfo.getVersion());
             return projectsInfoVo;
-        }
-        return null;
+        }else throw new GlobalException(ResCommonBeanEnum.emptyProject);
     }
 }

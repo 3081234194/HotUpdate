@@ -6,6 +6,7 @@ import com.eby.hotupdate.pojo.ProjectsInfo;
 import com.eby.hotupdate.pojo.ResCommonBean;
 import com.eby.hotupdate.reqdto.ProjectsInfoReq;
 import com.eby.hotupdate.reqdto.ProjectsReq;
+import com.eby.hotupdate.reqdto.ProjectsUpdateReq;
 import com.eby.hotupdate.service.impl.ProjectsInfoServiceImpl;
 import com.eby.hotupdate.service.impl.ProjectsServiceImpl;
 import com.eby.hotupdate.utils.RedisUtils;
@@ -55,8 +56,8 @@ public class ProjectsController implements InitializingBean {
 
     @ApiOperation(value = "修改项目")
     @PostMapping("/update")
-    public ResCommonBean update(@RequestHeader("Token") String token, ProjectsVo projectsVo){
-        Boolean res = projectsService.updateTo(token, projectsVo);
+    public ResCommonBean update(@RequestHeader("Token") String token, ProjectsUpdateReq projectsUpdateReq){
+        Boolean res = projectsService.updateTo(token, projectsUpdateReq);
         if(res)return  ResCommonBean.success();
         return ResCommonBean.error("修改失败");
     }
